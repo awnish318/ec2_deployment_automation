@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')//secret kept in Jenkins credentials
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')//secret kept in Jenkins credentials
+        AWS_DEFAULT_REGION    = 'ap-southeast-2' // Set your AWS region here
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/awnish318/ec2_deployment_automation.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+
+        stage('Approval') {
+            steps {
+                input message: 'Do you want to apply these Terraform changes?', ok: 'Deploy'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve tfplan'
+            }
+        }
+    }
+}
