@@ -9,6 +9,8 @@ resource "aws_instance" "ServerA" {
   ami           = var.ami_id
   instance_type = var.instance_type
 
+  subnet_id     = "subnet-0ec962c63c2ea7edf"
+
   tags = {
     Name = "${var.instance_name}-${count.index + 1}"
   }
