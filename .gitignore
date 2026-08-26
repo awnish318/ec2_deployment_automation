@@ -1,0 +1,10 @@
+# Exclude variable files containing secrets
+*.tfvars
+*.tfvars.json
+
+# Exclude local state files
+*.tfstate
+*.tfstate.backup
+
+# Exclude Terraform temporary working directory
+.terraform/
